@@ -1,232 +1,88 @@
 #!/usr/bin/env bash
-# init.sh — environment health check
-# Usage:
-#   ./init.sh        quick check (type-check only, <5s)
-#   ./init.sh full   full verification (lint + type + test, run before marking done)
-set -euo pipefail
+set -o pipefail
 
-MODE="${1:-quick}"
+# Add only commands supported by repository evidence.
+# Set HARNESS_JOBS to limit concurrent build and test tasks.
+MAX_JOBS="${HARNESS_JOBS:-4}"
 STATUS=0
-CONFIGURED_COMMANDS=(
-{{CONFIGURED_COMMANDS}}
+
+FORMAT_TASKS=(
+  # "pnpm run format:write"
 )
 
-if [ "$MODE" != "quick" ] && [ "$MODE" != "full" ]; then
-  echo "Usage: $0 [quick|full]" >&2
+LINT_TASKS=(
+  # "pnpm run lint -- --fix"
+)
+
+BUILD_TASKS=(
+  # "pnpm run build"
+)
+
+TEST_TASKS=(
+  # "pnpm run test"
+)
+
+if ! [[ "$MAX_JOBS" =~ ^[1-9][0-9]*$ ]]; then
+  echo "FAIL HARNESS_JOBS must be a positive integer" >&2
   exit 2
 fi
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "FAIL jq is required by init.sh and scripts/check-state.sh" >&2
-  exit 1
-fi
+run_task() {
+  local phase="$1"
+  local command="$2"
 
-echo "=== Init [mode: $MODE] ==="
+  echo "RUN  [$phase] $command"
+  if bash -c "$command"; then
+    echo "PASS [$phase] $command"
+    return 0
+  fi
 
-absent() {
-  echo "ABSENT $1 (not configured)"
-  echo "⚠️  $1 is not configured; continuing."
+  echo "FAIL [$phase] $command" >&2
+  return 1
 }
 
-not_applicable() {
-  echo "NOT APPLICABLE $1"
-}
-
-run_check() {
-  local label="$1"
+run_parallel() {
+  local phase="$1"
   shift
-  echo "RAN $label"
-  if "$@"; then
-    echo "PASS $label"
+
+  if [ "$#" -eq 0 ]; then
+    echo "SKIP [$phase] no task configured"
     return 0
   fi
-  echo "FAIL $label"
-  return 1
-}
 
-run_package_script() {
-  local script="$1"
-  if [ "$PM" = "npm" ]; then npm run "$script"; else "$PM" run "$script"; fi
-}
+  local command
+  local pid
+  local -a pids=()
 
-has_package_script() {
-  jq -e --arg script "$1" '.scripts[$script] | type == "string" and length > 0' package.json >/dev/null 2>&1
-}
+  for command in "$@"; do
+    run_task "$phase" "$command" &
+    pids+=("$!")
 
-package_check_or_absent() {
-  local label="$1"
-  local script="$2"
-  if has_package_script "$script"; then
-    run_check "$label ($script)" run_package_script "$script" || STATUS=1
-  else
-    absent "$label"
-  fi
-}
+    if [ "${#pids[@]}" -ge "$MAX_JOBS" ]; then
+      for pid in "${pids[@]}"; do
+        wait "$pid" || STATUS=1
+      done
+      pids=()
+    fi
+  done
 
-package_type_check() {
-  if has_package_script check; then
-    run_check "type-check (check)" run_package_script check || STATUS=1
-  elif has_package_script typecheck; then
-    run_check "type-check (typecheck)" run_package_script typecheck || STATUS=1
-  elif has_package_script type-check; then
-    run_check "type-check (type-check)" run_package_script type-check || STATUS=1
-  else
-    absent "type-check"
-  fi
-}
-
-python_static_check() {
-  if "$PY" -c 'import mypy' >/dev/null 2>&1; then
-    run_check "type-check (mypy)" "$PY" -m mypy . || STATUS=1
-  elif "$PY" -c 'import ruff' >/dev/null 2>&1; then
-    run_check "type-check (ruff)" "$PY" -m ruff check . || STATUS=1
-  elif "$PY" -c 'import flake8' >/dev/null 2>&1; then
-    run_check "type-check (flake8)" "$PY" -m flake8 . || STATUS=1
-  else
-    absent "type-check (mypy/ruff/flake8)"
-  fi
-}
-
-python_test_check() {
-  echo "RAN test (pytest)"
-  if "$PY" -m pytest; then
-    echo "PASS test (pytest)"
-    return 0
-  else
-    local exit_code=$?
-  fi
-  if [ "$exit_code" -eq 5 ]; then
-    echo "ABSENT test (pytest; no tests collected; exit 5)"
-    return 0
-  fi
-  echo "FAIL test (pytest; exit $exit_code)"
-  return 1
-}
-
-run_configured_commands() {
-  if [ "${#CONFIGURED_COMMANDS[@]}" -eq 0 ]; then
-    return 0
-  fi
-  if [ "$MODE" = "quick" ]; then
-    not_applicable "configured verification commands (full mode only)"
-    return 0
-  fi
-  for command in "${CONFIGURED_COMMANDS[@]}"; do
-    run_check "configured command: $command" bash -c "$command" || STATUS=1
+  for pid in "${pids[@]}"; do
+    wait "$pid" || STATUS=1
   done
 }
 
-run_configured_commands
+echo "=== Format ==="
+run_parallel "format" "${FORMAT_TASKS[@]}"
 
-# ── Node.js ───────────────────────────────────────────────────────────────────
-if [ -f package.json ]; then
-  if [ -f pnpm-lock.yaml ]; then PM="pnpm"
-  elif [ -f yarn.lock ]; then PM="yarn"
-  elif [ -f bun.lock ] || [ -f bun.lockb ]; then PM="bun"
-  else PM="npm"; fi
+echo "=== Lint ==="
+run_parallel "lint" "${LINT_TASKS[@]}"
 
-  [ -d node_modules ] || echo "⚠️  node_modules missing; no dependency installation will be attempted."
-  if ! jq empty package.json >/dev/null 2>&1; then
-    echo "FAIL package.json is not valid JSON"
-    STATUS=1
-  else
-    package_type_check
-    if [ "$MODE" = "quick" ]; then
-      not_applicable "lint (full mode only)"
-      not_applicable "test (full mode only)"
-    else
-      package_check_or_absent "lint" lint
-      package_check_or_absent "test" test
-    fi
-  fi
+echo "=== Build and test ==="
+run_parallel "build/test" "${BUILD_TASKS[@]}" "${TEST_TASKS[@]}"
 
-# ── Python ────────────────────────────────────────────────────────────────────
-elif [ -f pyproject.toml ] || [ -f requirements.txt ]; then
-  PY="$(command -v python3 || command -v python || true)"
-  if [ -z "$PY" ]; then
-    absent "python checks"
-  elif [ "$MODE" = "quick" ]; then
-    python_static_check
-    not_applicable "lint (full mode only)"
-    not_applicable "test (full mode only)"
-  else
-    if "$PY" -c 'import ruff' >/dev/null 2>&1; then
-      run_check "lint (ruff)" "$PY" -m ruff check . || STATUS=1
-    elif "$PY" -c 'import flake8' >/dev/null 2>&1; then
-      run_check "lint (flake8)" "$PY" -m flake8 . || STATUS=1
-    else
-      absent "lint (ruff/flake8)"
-    fi
-    if "$PY" -c 'import mypy' >/dev/null 2>&1; then
-      run_check "type-check (mypy)" "$PY" -m mypy . || STATUS=1
-    else
-      absent "type-check (mypy)"
-    fi
-    if "$PY" -c 'import pytest' >/dev/null 2>&1; then
-      python_test_check || STATUS=1
-    else
-      absent "test (pytest)"
-    fi
-  fi
-
-# ── Go ────────────────────────────────────────────────────────────────────────
-elif [ -f go.mod ]; then
-  if [ "$MODE" = "quick" ]; then
-    run_check "type-check (go vet)" go vet ./... || STATUS=1
-    not_applicable "test (full mode only)"
-  else
-    run_check "type-check (go vet)" go vet ./... || STATUS=1
-    run_check "test (go test)" go test ./... || STATUS=1
-  fi
-
-# ── Rust ──────────────────────────────────────────────────────────────────────
-elif [ -f Cargo.toml ]; then
-  if [ "$MODE" = "quick" ]; then
-    run_check "type-check (cargo check)" cargo check || STATUS=1
-    not_applicable "test (full mode only)"
-  else
-    run_check "type-check (cargo check)" cargo check || STATUS=1
-    run_check "test (cargo test)" cargo test || STATUS=1
-  fi
-
-# ── Maven / Gradle / .NET ─────────────────────────────────────────────────────
-elif [ -f pom.xml ]; then
-  if [ "$MODE" = "quick" ]; then
-    run_check "type-check (mvn validate)" mvn validate || STATUS=1
-    not_applicable "test (full mode only)"
-  else
-    run_check "type-check (mvn validate)" mvn validate || STATUS=1
-    run_check "test (mvn test)" mvn test || STATUS=1
-  fi
-elif [ -f build.gradle ] || [ -f build.gradle.kts ]; then
-  if [ "$MODE" = "quick" ]; then
-    run_check "type-check (gradle check)" ./gradlew check || STATUS=1
-    not_applicable "test (full mode only)"
-  else
-    run_check "type-check (gradle check)" ./gradlew check || STATUS=1
-    run_check "test (gradle test)" ./gradlew test || STATUS=1
-  fi
-elif ls ./*.csproj ./*.sln >/dev/null 2>&1; then
-  if [ "$MODE" = "quick" ]; then
-    run_check "type-check (dotnet build)" dotnet build || STATUS=1
-    not_applicable "test (full mode only)"
-  else
-    run_check "type-check (dotnet build)" dotnet build || STATUS=1
-    run_check "test (dotnet test)" dotnet test || STATUS=1
-  fi
-else
-  not_applicable "project verification (unrecognized stack)"
-  echo "⚠️  No recognized stack or configured checks; continuing."
+if [ "$STATUS" -ne 0 ]; then
+  echo "=== Verification failed ===" >&2
+  exit "$STATUS"
 fi
 
-echo ""
-echo "=== Done ==="
-
-if [ -f scripts/check-state.sh ]; then
-  bash scripts/check-state.sh feature_index.json || STATUS=1
-else
-  echo "FAIL scripts/check-state.sh is missing"
-  STATUS=1
-fi
-
-exit "$STATUS"
+echo "=== Verification passed ==="
