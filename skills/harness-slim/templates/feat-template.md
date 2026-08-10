@@ -22,8 +22,7 @@
 
 ## Plan
 
-<!-- Keep steps here for small, single-session work. -->
-<!-- For multi-step, multi-session, or multi-agent work, replace the steps with: Plan -> `docs/plans/{{FEATURE_ID}}.md` -->
+<!-- Keep small, single-session steps here. For complex, multi-session, or multi-agent work, use `docs/plans/{{FEATURE_ID}}.md`. -->
 
 1. <Step.>
 2. <Step.>

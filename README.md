@@ -46,15 +46,16 @@ maintains these coordinated artifacts:
 ```text
 AGENTS.md
 feature_index.json
+features/feat-template.md
 features/feat-<id>.md
-feat-template.md
 progress.md
 init.sh
 ```
 
 `AGENTS.md` routes an agent through the active feature and relevant documents.
 The index uses `todo`, `active`, `blocked`, and `done`; keep zero or one feature
-active. `progress.md` is append-only session state. `init.sh` is an editable
+active. `progress.md` is append-only session state: add each record below its
+final template note without editing older records. `init.sh` is an editable
 Bash workflow based only on observed repository commands.
 
 For a small task, keep the plan in its feature record. For multi-step,

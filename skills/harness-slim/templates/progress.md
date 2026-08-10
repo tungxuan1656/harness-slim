@@ -1,6 +1,6 @@
 # Progress
 
-<!-- Add each new block below this note. Do not edit older blocks. -->
+<!-- Log template -->
 
 ## YYYY-MM-DD — feat-001
 
@@ -9,3 +9,5 @@
 **Evidence**: —
 **Blockers**: none
 **Next**: Define the feature scope and acceptance criteria.
+
+<!-- Add each new block below this note. Do not edit older blocks. -->

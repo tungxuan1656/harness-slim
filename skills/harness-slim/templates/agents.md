@@ -22,7 +22,7 @@ If baseline verification fails, record the failure. Fix it only when the current
 - Keep implementation inside the active feature's scope and acceptance criteria.
 - Complete every dependency before activating its dependent feature.
 - Record scope, acceptance, evidence, and handoff in the feature file.
-- Record session results in `progress.md`. Do not copy the feature scope there.
+- Record session results in `progress.md` below its final template note. Do not copy the feature scope there.
 - Update `init.sh` when verification commands or workspace modules change.
 
 ## Plans
@@ -49,7 +49,7 @@ A feature is done only when:
 ## End session
 
 1. Update the feature status and handoff.
-2. Add a new block to `progress.md`.
+2. Add a new block below the final template note in `progress.md`; do not edit older blocks.
 3. Record blockers and one next action.
 
 ## Verification

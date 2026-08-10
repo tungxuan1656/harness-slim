@@ -41,9 +41,11 @@ multi-session, or multi-agent work, use `docs/plans/feat-<id>.md` and link it
 from the record. The external plan identifies phases, dependencies, agent and
 file ownership, verification, and handoff before parallel work starts.
 
-`progress.md` is append-only. Each new relevant block records the feature,
-state, completed work, evidence, blockers, and one next action. Do not repeat
-feature scope or durable design decisions there.
+`progress.md` is append-only and history-preserving. Leave its log template at
+the top, then add each new relevant block below the final template note without
+editing older blocks. Each block records the feature, state, completed work,
+evidence, blockers, and one next action. Do not repeat feature scope or durable
+design decisions there.
 
 ## Completion
 

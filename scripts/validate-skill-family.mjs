@@ -148,6 +148,56 @@ function validateEvals(source, path, expectedName) {
   }
 }
 
+async function validateHarnessSlimContract(directory) {
+  const skillPath = resolve(directory, "SKILL.md");
+  const skill = await readRequired(skillPath);
+  assert(
+    skill.includes("| `features/feat-template.md` | Reusable feature document template |"),
+    `${skillPath}: feature template must be created in features/`,
+  );
+  assert(
+    skill.includes("Do not reference `.agents/README.md` from `AGENTS.md`."),
+    `${skillPath}: AGENTS.md must not reference .agents/README.md`,
+  );
+
+  const featureTemplatePath = resolve(directory, "templates/feat-template.md");
+  const featureTemplate = await readRequired(featureTemplatePath);
+  assert(
+    featureTemplate.includes(
+      "<!-- Keep small, single-session steps here. For complex, multi-session, or multi-agent work, use `docs/plans/{{FEATURE_ID}}.md`. -->",
+    ),
+    `${featureTemplatePath}: plan guidance is incorrect`,
+  );
+
+  const progressTemplatePath = resolve(directory, "templates/progress.md");
+  const progressTemplate = await readRequired(progressTemplatePath);
+  const expectedProgressTemplate = `# Progress
+
+<!-- Log template -->
+
+## YYYY-MM-DD — feat-001
+
+**State**: todo
+**Done**: —
+**Evidence**: —
+**Blockers**: none
+**Next**: Define the feature scope and acceptance criteria.
+
+<!-- Add each new block below this note. Do not edit older blocks. -->
+`;
+  assert(
+    progressTemplate === expectedProgressTemplate,
+    `${progressTemplatePath}: must preserve the append-only log template`,
+  );
+
+  const agentsTemplatePath = resolve(directory, "templates/agents.md");
+  const agentsTemplate = await readRequired(agentsTemplatePath);
+  assert(
+    !agentsTemplate.includes(".agents/README.md"),
+    `${agentsTemplatePath}: AGENTS.md must not reference .agents/README.md`,
+  );
+}
+
 async function validateSkill(skill) {
   const directory = resolve(repositoryRoot, "skills", skill.name);
   const skillPath = resolve(directory, "SKILL.md");
@@ -167,6 +217,10 @@ async function validateSkill(skill) {
     const metadataPath = resolve(directory, "metadata.json");
     const metadata = JSON.parse(await readRequired(metadataPath));
     assert(metadata.name === skill.name, `${metadataPath}: name mismatch`);
+  }
+
+  if (skill.name === "harness-slim") {
+    await validateHarnessSlimContract(directory);
   }
 
   if (skill.evals) {

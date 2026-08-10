@@ -17,12 +17,12 @@ Create only the knowledge and verification artifacts that let an agent start, st
 |---|---|
 | `AGENTS.md` | Navigation, repository-wide rules, verification, and lifecycle |
 | `feature_index.json` | Feature ID, title, status, and dependencies |
+| `features/feat-template.md` | Reusable feature document template |
 | `features/feat-<id>.md` | Scope, acceptance, plan, evidence, and handoff |
-| `feat-template.md` | Reusable feature document template |
-| `progress.md` | Append-only session result and next action |
+| `progress.md` | Append-only session result and next action history |
 | `init.sh` | Editable format, lint, build, and test workflow |
 
-Do not add state-check scripts, generated helpers, empty documentation scaffolds, or generic coding advice.
+Do not add state-check scripts, generated helpers, empty documentation scaffolds, generic coding advice, or `.agents/README.md`. Do not reference `.agents/README.md` from `AGENTS.md`.
 
 ## Inspect before writing
 
@@ -47,7 +47,7 @@ When a harness already exists:
 
 Keep zero or one feature `active`. Do not activate `todo` work without user scope.
 
-For a small, single-session feature, copy `feat-template.md` to `features/feat-<id>.md` and keep its plan inline.
+Create `features/feat-template.md` from `templates/feat-template.md`. For a small, single-session feature, copy it to `features/feat-<id>.md` and keep its plan inline.
 
 For multi-step, multi-session, or multi-agent work:
 
@@ -56,6 +56,8 @@ For multi-step, multi-session, or multi-agent work:
 3. Define phases, dependencies, agent ownership, file ownership, verification, and handoff.
 
 Keep durable architecture and product facts in their canonical project documents. Do not duplicate them in feature or progress records.
+
+Keep `progress.md` append-only: retain its template at the top and add each new block below the final template note, without editing older blocks.
 
 ## Write init.sh from evidence
 

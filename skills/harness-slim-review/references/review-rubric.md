@@ -34,7 +34,7 @@ Do not require commit, branch, review, release, or tool policy unless repository
 
 | Criterion | Pass condition |
 |---|---|
-| Append-only | New session records do not rewrite prior history. |
+| Append-only | New session records are added below the final template note without rewriting prior history. |
 | Continuity | Each relevant block records completed work, evidence, blockers, and next action. |
 | Ownership | Progress does not duplicate feature scope or durable architecture decisions. |
 

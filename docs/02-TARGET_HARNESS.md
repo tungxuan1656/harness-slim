@@ -10,14 +10,15 @@ failures. It does not create broad documentation scaffolding or helper tooling.
 |---|---|
 | `AGENTS.md` | Session startup, repository-wide operating rules, escalation, and verification route |
 | `feature_index.json` | Feature ID, title, status, and dependencies |
+| `features/feat-template.md` | Starting shape for feature records |
 | `features/feat-<id>.md` | Scope, acceptance, plan, verification evidence, and handoff for one feature |
-| `feat-template.md` | Starting shape for feature records |
 | `progress.md` | Append-only session results, blockers, and next action |
 | `init.sh` | Editable Bash verification from repository evidence |
 
 Use `skills/harness-slim/templates/` as the canonical starting point. Replace
 all placeholders with observed facts. Do not add state-check scripts, generated
-helpers, empty documentation trees, or generic coding advice.
+helpers, empty documentation trees, generic coding advice, or
+`.agents/README.md`. `AGENTS.md` must not reference `.agents/README.md`.
 
 ## Session route
 
