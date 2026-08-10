@@ -10,18 +10,15 @@
 
 <!-- Include exact commands and results. -->
 
-- [ ] `node --check skills/harness-slim/scripts/create-harness.mjs`
-- [ ] `node --check skills/harness-slim/scripts/validate-harness.mjs`
-- [ ] `node --check skills/harness-slim/scripts/lib/harness-utils.mjs`
-- [ ] `bash -n skills/harness-slim/scripts/check-state.sh`
-- [ ] `bash -n skills/harness-slim/templates/init.sh`
-- [ ] Generated state check: `./scripts/check-state.sh feature_index.json`
-- [ ] End-to-end harness creation + validation scores 100/100
+- [ ] `node scripts/validate-skill-family.mjs`
+- [ ] `bash -n skills/harness-slim/templates/init.sh` when the template changed
+- [ ] Exercised the changed skill against a representative repository or prompt
 
 ## Checklist
 
-- [ ] Documentation uses accurate paths and commands.
-- [ ] Baseline failures are reported rather than repaired outside the selected scope.
-- [ ] No universal commit policy is imposed; repository convention is followed.
-- [ ] No secrets, personal data, editor files, or unrelated generated artifacts included.
-- [ ] README updated if user-facing paths or usage changed.
+- [ ] Documentation uses existing skill names, paths, commands, and install prompts.
+- [ ] The change preserves repository evidence and reports uncertainty explicitly.
+- [ ] No removed router, phase-specialist, generated fallback, or legacy script is referenced.
+- [ ] No universal commit, branch, review, release, or tool policy was added without evidence.
+- [ ] No secrets, personal data, editor files, or unrelated generated artifacts are included.
+- [ ] README updated when a user-facing path, prompt, or usage changed.
