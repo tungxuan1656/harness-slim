@@ -1,11 +1,11 @@
 {
   "name": "harness-slim",
-  "description": "Harness engineering for AI coding agents — five subsystems, idle-by-default feature_index.json state (id, title, status, priority, depends_on), memory persistence, session continuity, verification workflows, scope control, lifecycle management, and optional evidence-grounded architecture guidance.",
+  "description": "Create compact coding-agent harnesses by inspecting repository evidence and writing concise instructions, feature state, progress, and editable Bash verification.",
   "license": "MIT",
   "author": "tungxuan1656",
   "publisher": "tungxuan1656",
   "repository": "https://github.com/tungxuan1656/harness-slim",
-  "languages": ["en", "zh"],
+  "languages": ["en"],
   "compatibility": {
     "agents": [
       "claude-code",
@@ -16,50 +16,37 @@
     ]
   },
   "entryPoint": "SKILL.md",
-  "runtime": {
-    "node": ">=20"
-  },
   "references": [
     "references/memory-persistence-pattern.md",
     "references/context-engineering-pattern.md",
     "references/multi-agent-pattern.md",
-    "references/repository-knowledge-architecture.md",
     "references/gotchas.md"
   ],
   "triggers": [
     "harness engineering",
+    "coding agent harness",
     "agent reliability",
     "session continuity",
-    "memory persistence",
     "verification workflow",
     "scope control",
     "lifecycle management",
     "AGENTS.md",
-    "CLAUDE.md",
+    "feature_index.json",
+    "feature documents",
     "feature tracking",
-    "session handoff",
+    "progress.md",
+    "init.sh",
+    "monorepo verification",
+    "parallel build and test",
     "multi-agent coordination",
-    "context engineering",
-    "tool safety",
-    "permission pipeline"
+    "context engineering"
   ],
   "bundled": {
-    "scripts": [
-      "scripts/create-harness.mjs",
-      "scripts/validate-harness.mjs",
-      "scripts/render-assessment-html.mjs",
-      "scripts/run-benchmark.mjs",
-      "scripts/check-state.sh",
-      "scripts/lib/harness-utils.mjs"
-    ],
-    "assets": [],
+    "scripts": [],
     "templates": [
       "templates/agents.md",
-      "templates/architecture.md",
-      "templates/detailed-plan.md",
-      "templates/docs/README.md",
+      "templates/feat-template.md",
       "templates/feature_index.json",
-      "templates/features/feat-001.md",
       "templates/init.sh",
       "templates/progress.md"
     ]

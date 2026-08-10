@@ -1,0 +1,40 @@
+name: Skill family preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/skill-family.yml"
+      - "README.md"
+      - "docs/**"
+      - "scripts/validate-skill-family.mjs"
+      - "skills/harness-slim/**"
+      - "skills/harness-slim-review/**"
+      - "skills/harness-slim-gardenring/**"
+      - "skills/agent-docs-architect/**"
+      - "skills/agent-docs-writer/**"
+  push:
+    paths:
+      - ".github/workflows/skill-family.yml"
+      - "README.md"
+      - "docs/**"
+      - "scripts/validate-skill-family.mjs"
+      - "skills/harness-slim/**"
+      - "skills/harness-slim-review/**"
+      - "skills/harness-slim-gardenring/**"
+      - "skills/agent-docs-architect/**"
+      - "skills/agent-docs-writer/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/validate-skill-family.mjs
+      - run: bash -n skills/harness-slim/templates/init.sh
