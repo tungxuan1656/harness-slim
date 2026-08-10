@@ -32,6 +32,11 @@ If baseline verification fails, record the failure. Fix it only when the current
 - Link the external plan from the feature file.
 - Define agent and file ownership before parallel work starts.
 
+## Escalation
+
+- Read the relevant project document before making an architecture or product decision.
+- Ask the user when requirements, scope, ownership, or a repeated verification failure remain unclear.
+
 ## Done
 
 A feature is done only when:
