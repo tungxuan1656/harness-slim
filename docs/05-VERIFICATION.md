@@ -37,6 +37,6 @@ After writing it, make it executable and run the relevant repository commands.
 `init.sh` that applies format or lint fixes unless the user authorizes those
 working-tree changes. Syntax checks and read-only inspection remain safe.
 
-`harness-slim-gardenring` runs targeted checks after each coherent cleanup,
+`repo-gardening` runs targeted checks after each coherent cleanup,
 then the repository verification route. It reports unrelated baseline failures
 without absorbing them into the cleanup scope.

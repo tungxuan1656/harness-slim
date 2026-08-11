@@ -1,9 +1,13 @@
 # Harness
 
-A compact skill collection for making coding agents useful in real repositories.
-It keeps agent context focused: establish a small working harness, assess it
-without changing it, remove proven drift, and keep repository knowledge easy to
-find and maintain.
+A compact core skill family for making coding agents useful in real
+repositories. It keeps agent context focused: establish a small working
+harness, assess it without changing it, remove proven drift, and keep
+repository knowledge easy to find and maintain.
+
+Optional companion skills add design, planning, execution, quality, and
+communication workflows. They remain independently installable; choose a
+profile that fits the work instead of installing every skill.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -15,7 +19,7 @@ find and maintain.
 |---|---|---|
 | `harness-slim` | A repository needs a compact, feature-driven operating harness | `AGENTS.md`, feature state, progress, and evidence-backed `init.sh` |
 | `harness-slim-review` | You need an evidence-based assessment before changing a harness | Read-only verdict and prioritized fixes |
-| `harness-slim-gardenring` | Repeated agent-generated drift or stale artifacts need a safe cleanup | One small, verified cleanup batch and a guardrail when justified |
+| `repo-gardening` | Proven code, configuration, dependency, or related-artifact drift needs a safe cleanup | One small, verified cleanup batch and a guardrail when justified |
 | `agent-docs-architect` | The documentation structure, ownership, or routes are unclear | A minimal documentation blueprint and writer handoff |
 | `agent-docs-writer` | A selected agent-facing document needs to be written or revised | Concise, routed, evidence-based documentation |
 
@@ -23,12 +27,31 @@ Use the narrowest matching skill. There is no router skill and no generated
 fallback phase system: each skill is independently invoked and owns a focused
 job.
 
+## Optional companion profiles
+
+Install optional skills only when their workflow is useful. They do not replace
+the core contracts or create their own documentation tree.
+
+| Profile | Skills | Use for |
+|---|---|---|
+| Product and design | `brainstorming`, `codebase-design` | Clarify a substantial change and design module seams |
+| Planning and execution | `writing-plans`, `executing-plans`, `subagent-driven-development` | Plan and execute a multi-step change |
+| Quality | `systematic-debugging`, `verification-before-completion` | Investigate failures and make evidence-backed completion claims |
+| Communication | `simple-english`, `handoff`, `git-commit` | Improve technical prose, transfer context, or create a commit when requested |
+| Discovery | `find-skills` | Find an additional capability outside this family |
+
+When these skills create or update an artifact, they must first reuse the
+repository's documented owner and path. With Harness Slim, a multi-step plan
+lives at `docs/plans/feat-<id>.md` and is linked from its feature record. Do
+not create `docs/superpowers/` as a fallback. If an artifact's owner or path is
+unclear, use `agent-docs-architect`; if it is known, use `agent-docs-writer`.
+
 ## Typical flow
 
 ```text
 Need a working agent harness     -> harness-slim
 Need to assess that harness      -> harness-slim-review
-Need to remove proven drift      -> harness-slim-gardenring
+Need to remove proven drift      -> repo-gardening
 Need to choose the docs system   -> agent-docs-architect
 Need to write one chosen document -> agent-docs-writer
 ```
@@ -37,6 +60,12 @@ Need to write one chosen document -> agent-docs-writer
 `agent-docs-writer` creates or revises the selected documents. `harness-slim`
 uses the repository's existing canonical documents instead of replacing them
 with a universal documentation tree.
+
+For documentation maintenance, route a bounded repair of known documents to
+`agent-docs-writer`. Route unclear ownership or hierarchy to
+`agent-docs-architect`. `repo-gardening` changes documentation only when it is
+direct residue of a confirmed code, configuration, dependency, or artifact
+cleanup.
 
 ## Harness Slim artifacts
 
@@ -71,7 +100,7 @@ Install only the skills you need:
 npx skills add tungxuan1656/harness-slim
 npx skills add tungxuan1656/harness-slim --skill harness-slim
 npx skills add tungxuan1656/harness-slim --skill harness-slim-review
-npx skills add tungxuan1656/harness-slim --skill harness-slim-gardenring
+npx skills add tungxuan1656/harness-slim --skill repo-gardening
 npx skills add tungxuan1656/harness-slim --skill agent-docs-architect
 npx skills add tungxuan1656/harness-slim --skill agent-docs-writer
 ```
@@ -81,7 +110,7 @@ Example prompts:
 ```text
 Use $harness-slim to create a concise evidence-based harness for this repository.
 Use $harness-slim-review to audit the current harness without modifying files.
-Use $harness-slim-gardenring to remove one verified batch of duplicated helpers.
+Use $repo-gardening to remove one verified batch of duplicated helpers.
 Use $agent-docs-architect to propose the smallest documentation architecture we need.
 Use $agent-docs-writer to rewrite AGENTS.md using the accepted documentation map.
 ```

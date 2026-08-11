@@ -8,7 +8,7 @@ Each active package owns its own instructions and local references:
 skills/
 ├── harness-slim/
 ├── harness-slim-review/
-├── harness-slim-gardenring/
+├── repo-gardening/
 ├── agent-docs-architect/
 └── agent-docs-writer/
 ```
@@ -38,8 +38,8 @@ Exercise changed skills against representative repositories and prompts:
   active/dependent features, and dirty worktrees.
 - `harness-slim-review`: safe read-only audit, evidence classification, and
   no-op verdicts when an omission is justified.
-- `harness-slim-gardenring`: duplicate helpers, dynamic references, stale docs,
-  uncertain candidates, and unrelated baseline failures.
+- `repo-gardening`: duplicate helpers, dynamic references, cleanup residue in
+  related documents, uncertain candidates, and unrelated baseline failures.
 - `agent-docs-architect`: compact and federated repositories, existing native
   documents, external canonical systems, and an apply handoff.
 - `agent-docs-writer`: each document type, conflicting evidence, rewrite

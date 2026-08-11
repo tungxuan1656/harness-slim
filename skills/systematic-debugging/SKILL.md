@@ -174,7 +174,8 @@ You MUST complete each phase before proceeding to the next.
    - Automated test if possible
    - One-off test script if no framework
    - MUST have before fixing
-   - Use the `superpowers:test-driven-development` skill for writing proper failing tests
+   - Use the repository's test framework and conventions. If a test-writing
+     skill is installed, it can help but is not required.
 
 2. **Implement Single Fix**
    - Address the root cause identified
@@ -186,7 +187,8 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
-   - Use the `superpowers:verification-before-completion` skill before claiming success
+   - Run fresh verification before claiming success. Use
+     `verification-before-completion` when it is installed, but do not require it.
 
 4. **If Fix Doesn't Work**
    - STOP

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Harness Slim Gardenring"
-  short_description: "Clean recurring AI-generated repository drift"
-  default_prompt: "Use $harness-slim-gardenring to find and remove a small, evidence-backed batch of AI slop from this repository."

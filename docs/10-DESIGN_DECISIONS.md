@@ -5,7 +5,7 @@
 **Status:** Accepted
 
 The family has five focused skills: `harness-slim`, `harness-slim-review`,
-`harness-slim-gardenring`, `agent-docs-architect`, and `agent-docs-writer`.
+`repo-gardening`, `agent-docs-architect`, and `agent-docs-writer`.
 There is no router, phase composition, or generated fallback reference layer.
 
 ## D002 — Harness Slim uses coordinated, compact state
@@ -27,7 +27,7 @@ not silently repair files or run formatter and linter fixes without permission.
 
 **Status:** Accepted
 
-`harness-slim-gardenring` cleans confirmed drift, preserves behavior, and adds a
+`repo-gardening` cleans confirmed drift, preserves behavior, and adds a
 durable guardrail only for recurring objective failures. It does not treat
 generated-looking or unfamiliar code as defective by default.
 

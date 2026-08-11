@@ -36,7 +36,9 @@ orient on instructions and canonical patterns
   -> record a guardrail only when recurrence justifies it
 ```
 
-Use `harness-slim-gardenring`. Keep feature work and garden work separate.
+Use `repo-gardening`. Keep feature work and garden work separate. Route a
+docs-only repair to `agent-docs-writer`; route an unclear documentation map to
+`agent-docs-architect`.
 
 ## Design documentation architecture
 

@@ -26,10 +26,10 @@ You MUST create a task for each of these items and complete them in order:
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+6. **Record the accepted design** — use the repository's canonical product or design artifact
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
+9. **Transition to implementation** — use the repository's planning workflow when implementation is approved
 
 ## Process Flow
 
@@ -40,25 +40,27 @@ digraph brainstorming {
     "Propose 2-3 approaches" [shape=box];
     "Present design sections" [shape=box];
     "User approves design?" [shape=diamond];
-    "Write design doc" [shape=box];
+    "Record accepted design" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
-    "Invoke writing-plans skill" [shape=doublecircle];
+    "Hand off to the selected planning workflow" [shape=doublecircle];
 
     "Explore project context" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Propose 2-3 approaches";
     "Propose 2-3 approaches" -> "Present design sections";
     "Present design sections" -> "User approves design?";
     "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Spec self-review\n(fix inline)";
+    "User approves design?" -> "Record accepted design" [label="yes"];
+    "Record accepted design" -> "Spec self-review\n(fix inline)";
     "Spec self-review\n(fix inline)" -> "User reviews spec?";
-    "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+    "User reviews spec?" -> "Record accepted design" [label="changes requested"];
+    "User reviews spec?" -> "Hand off to the selected planning workflow" [label="approved"];
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**The terminal state is an accepted design and a clear handoff.** Use
+`writing-plans` when it is installed and the change needs a multi-step plan.
+Otherwise follow the repository's existing planning and implementation rules.
 
 ## The Process
 
@@ -104,10 +106,19 @@ digraph brainstorming {
 
 **Documentation:**
 
-- Write the validated design (spec) to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`
-  - (User preferences for spec location override this default)
-- Use elements-of-style:writing-clearly-and-concisely skill if available
-- Commit the design document to git
+- Read `AGENTS.md` and existing product, design, and plan documents before
+  selecting an output path.
+- Write the validated design in the repository-native artifact that already owns
+  the behavior. When Harness Slim is active, link the selected design source
+  from the feature record instead of creating a parallel spec tree.
+- If the owner or location is unclear, use `agent-docs-architect` when it is
+  installed to propose the artifact map; otherwise record the unresolved
+  decision and do not invent a path. If it is known, use `agent-docs-writer`
+  when installed or write the selected repository-native artifact directly.
+- Do not create `docs/superpowers/` or commit the design unless the repository
+  policy or user explicitly requires it.
+- Use `simple-english` if it is installed and the document benefits from its
+  final clarity pass.
 
 **Spec Self-Review:**
 After writing the spec document, look at it with fresh eyes:
@@ -122,14 +133,15 @@ Fix any issues inline. No need to re-review — just fix and move on.
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:
 
-> "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
+> "The accepted design is recorded at `<path>`. Please review it and let me know if you want changes before implementation planning."
 
 Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
 
 **Implementation:**
 
-- Invoke the writing-plans skill to create a detailed implementation plan
-- Do NOT invoke any other skill. writing-plans is the next step.
+- Use `writing-plans` for a multi-step implementation plan when it is installed.
+- Otherwise use the repository's existing plan format or proceed only under its
+  explicit implementation rules.
 
 ## Visual Companion
 

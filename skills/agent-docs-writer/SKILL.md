@@ -1,12 +1,12 @@
 ---
 name: agent-docs-writer
 description: >-
-  Write, review, or rewrite concise agent-facing repository documentation. Use for
-  AGENTS.md, architecture and subsystem guides, product or domain specs, feature
-  documents, progress or handoff records, and durable decisions. Produces the
-  smallest document that lets an agent locate, understand, constrain, decide, and
-  verify work. Uses explicit structure, canonical sources, progressive disclosure,
-  and pragmatic Simplified Technical English.
+  Write, review, rewrite, or maintain concise agent-facing repository
+  documentation. Use for AGENTS.md, architecture and subsystem guides, product
+  or domain specs, feature documents, progress or handoff records, durable
+  decisions, or a bounded repair of known stale documents. Use only when each
+  document's canonical responsibility and location are known. Do not use to
+  redesign documentation ownership or hierarchy.
 ---
 
 # Agent Docs Writer
@@ -40,6 +40,25 @@ Do not add generic introductions, framework tutorials, motivational prose, dupli
 Do not invent architecture, commands, product rules, or intended design. If evidence conflicts, label `Observed`, `Intended`, `Proposed`, or `Uncertain`.
 
 For a rewrite, preserve repository facts and required behavior. Remove generic policy that conflicts with this guide. Do not impose commit, branch, review, tool, or release rules without repository evidence or user instruction.
+
+## Maintenance mode
+
+Use this mode for a bounded docs-only repair when the selected files and their
+canonical owners are already known.
+
+1. State the selected files, the source each must agree with, and the repair
+   boundary.
+2. Classify each issue as stale, duplicate, broken-route, or unverified.
+3. Update the canonical document first, then repair links or remove only
+   duplicate text that has a clear canonical replacement.
+4. Preserve repository-native names, paths, and generated sources.
+5. Verify affected routes and commands. Report unresolved conflicts instead of
+   choosing a new owner.
+
+Do not use `repo-gardening` merely because prose is stale. If ownership,
+location, or the document graph is unclear, stop the repair. Hand the case to
+`agent-docs-architect` when it is installed; otherwise return the unresolved
+ownership question without redesigning the system.
 
 ## Document ownership
 

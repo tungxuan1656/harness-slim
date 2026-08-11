@@ -1,15 +1,17 @@
 ---
 name: handoff
-description: Compact the current conversation into a handoff document for another agent to pick up.
-argument-hint: "What will the next session be used for?"
-disable-model-invocation: true
+description: Create a compact handoff document for another agent to continue work. Use only when the user explicitly asks to hand off, transfer, or summarize work for a new session.
 ---
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
 
 Include a "suggested skills" section in the document, which suggests skills that the agent should invoke.
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+Do not duplicate content already captured in other artifacts (specs, plans,
+ADRs, issues, commits, diffs, feature records, or progress logs). Reference
+them by path or URL instead. When Harness Slim is active, cite the current
+feature record and the relevant `progress.md` entry rather than creating a
+competing work log.
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 

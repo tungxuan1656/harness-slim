@@ -1,8 +1,13 @@
-# Gardenring
+# Repository Gardening
 
-`harness-slim-gardenring` removes confirmed repository drift before future
+`repo-gardening` removes confirmed repository drift before future
 agents copy it. “AI slop” describes a quality pattern, not the identity of an
 author.
+
+It cleans code, configuration, dependencies, and related artifacts. It changes
+documentation only when that cleanup directly makes a document false or leaves
+residue. A docs-only repair belongs to `agent-docs-writer`; unclear ownership
+belongs to `agent-docs-architect`.
 
 ## Select one small batch
 
@@ -13,8 +18,8 @@ Change only a confirmed candidate.
 
 Choose one theme and a small reviewable batch. Require at least one strong
 signal: a violated invariant, an existing canonical implementation, proven
-unused status, a contradiction between maintained truth and a stale artifact,
-or guessed boundary data where a schema or typed API exists.
+unused status, a confirmed cleanup that makes a related artifact false, or
+guessed boundary data where a schema or typed API exists.
 
 ## Cleanup contract
 

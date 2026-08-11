@@ -11,7 +11,7 @@ software-engineering handbook.
 |---|---|
 | The repository lacks concise operating instructions, feature state, progress, or trustworthy verification | `harness-slim` |
 | The current compact harness may be unsafe, stale, or inconsistent | `harness-slim-review` |
-| Proven duplicate, stale, guessed, or dead repository material needs removal | `harness-slim-gardenring` |
+| Proven code, configuration, dependency, or related artifact drift needs removal | `repo-gardening` |
 | The repository does not know which documents it needs or who owns each fact | `agent-docs-architect` |
 | One document's responsibility and location are already known | `agent-docs-writer` |
 

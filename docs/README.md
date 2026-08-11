@@ -10,13 +10,18 @@ contracts, and release expectations for contributors.
 |---|---|
 | `harness-slim` | Create or simplify the compact feature-driven repository harness |
 | `harness-slim-review` | Audit that harness without mutating it |
-| `harness-slim-gardenring` | Remove one evidence-backed batch of recurring repository drift |
+| `repo-gardening` | Remove one evidence-backed batch of recurring repository drift |
 | `agent-docs-architect` | Select documentation artifacts, owners, routes, and lifecycle |
 | `agent-docs-writer` | Write or revise the selected agent-facing documents |
 
 The skills are independent. Do not add a router, generated fallback references,
 or a phase hierarchy. Select the narrowest skill that solves the observed
 problem.
+
+Optional companion skills add product design, execution, quality, communication,
+and discovery workflows. They must reuse the repository-selected artifact map;
+they do not create a `docs/superpowers/` tree or require unbundled skills. See
+the root [README](../README.md) for profiles and installation guidance.
 
 ## Design notes
 
@@ -25,7 +30,7 @@ problem.
 3. [Knowledge and ownership](03-KNOWLEDGE_AND_OWNERSHIP.md)
 4. [Feature and session state](04-WORK_AND_FEATURE_MODEL.md)
 5. [Verification](05-VERIFICATION.md)
-6. [Gardenring](06-GARDENING.md)
+6. [Repository gardening](06-GARDENING.md)
 7. [Skill boundaries](07-HARNESS_SKILL_SPEC.md)
 8. [Common workflows](08-WORKFLOWS.md)
 9. [Quality and release](09-EVALS_AND_MIGRATION.md)

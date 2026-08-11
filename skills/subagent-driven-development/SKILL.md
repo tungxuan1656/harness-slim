@@ -69,14 +69,14 @@ digraph process {
         "Append completion to ledger, mark todo complete" [shape=box];
     }
 
-    "Setup: worktree, ledger check, read plan, pre-flight review" [shape=box];
+    "Setup: approved workspace, ledger check, read plan, pre-flight review" [shape=box];
     "More tasks remain?" [shape=diamond];
-    "Dispatch final code reviewer (../requesting-code-review/code-reviewer.md)" [shape=box];
+    "Dispatch final whole-branch reviewer" [shape=box];
     "Final findings? ONE fix dispatch, one scoped re-review, adjudicate residuals" [shape=box];
-    "Final review clean: delete this plan's workspace" [shape=box];
-    "Use superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Final review clean: retire this plan's workspace when safe" [shape=box];
+    "Finish under repository delivery policy" [shape=box style=filled fillcolor=lightgreen];
 
-    "Setup: worktree, ledger check, read plan, pre-flight review" -> "Dispatch implementer subagent (./implementer-prompt.md)";
+    "Setup: approved workspace, ledger check, read plan, pre-flight review" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer asks questions?";
     "Implementer asks questions?" -> "Answer questions, provide context" [label="yes"];
     "Answer questions, provide context" -> "Implementer implements, tests, commits, self-reviews";
@@ -100,19 +100,19 @@ digraph process {
     "Park findings in ledger with rulings" -> "Append completion to ledger, mark todo complete";
     "Append completion to ledger, mark todo complete" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
-    "More tasks remain?" -> "Dispatch final code reviewer (../requesting-code-review/code-reviewer.md)" [label="no"];
-    "Dispatch final code reviewer (../requesting-code-review/code-reviewer.md)" -> "Final findings? ONE fix dispatch, one scoped re-review, adjudicate residuals";
-    "Final findings? ONE fix dispatch, one scoped re-review, adjudicate residuals" -> "Final review clean: delete this plan's workspace";
-    "Final review clean: delete this plan's workspace" -> "Use superpowers:finishing-a-development-branch";
+    "More tasks remain?" -> "Dispatch final whole-branch reviewer" [label="no"];
+    "Dispatch final whole-branch reviewer" -> "Final findings? ONE fix dispatch, one scoped re-review, adjudicate residuals";
+    "Final findings? ONE fix dispatch, one scoped re-review, adjudicate residuals" -> "Final review clean: retire this plan's workspace when safe";
+    "Final review clean: retire this plan's workspace when safe" -> "Finish under repository delivery policy";
 }
 ```
 
 ## Setup
 
-Ensure the work happens in an isolated workspace: use
-superpowers:using-git-worktrees to create one or verify the existing one.
-Never start implementation on a main/master branch without your human
-partner's explicit consent.
+Confirm the approved workspace before dispatching. Use the current working tree
+or a native git worktree when repository policy, task risk, or user scope calls
+for isolation. Never start implementation on a main/master branch without the
+human partner's explicit consent.
 
 Conversation memory does not survive compaction. In real sessions,
 controllers that lost their place have re-dispatched entire completed task
@@ -121,7 +121,7 @@ a ledger file, not only in todos.
 
 - Each plan owns a workspace: at skill start, run this skill's
   `scripts/sdd-workspace PLAN_FILE` — it prints the plan's git-ignored
-  directory (`<repo-root>/.superpowers/sdd/<plan-basename>/`), home to
+  directory (`<repo-root>/.agent-work/sdd/<plan-basename>/`), home to
   every artifact for THIS plan: ledger, briefs, reports, review packages.
   Another plan's directory is never yours to read or write.
 - Check for this plan's ledger at `<workspace>/progress.md`. If its first
@@ -129,7 +129,7 @@ a ledger file, not only in todos.
   — do not re-dispatch them; resume at the first task without one. A task
   whose last line is a fix round is mid-loop: resume the loop at the next
   round. A ledger whose first line names a different plan file — or a stray
-  ledger at the old flat path `.superpowers/sdd/progress.md` — is another
+  ledger at the old flat path `.agent-work/sdd/progress.md` — is another
   plan's progress: leave it in place and start your own, fresh.
 - Create the ledger with its identity as the first line:
   `# SDD ledger — plan: <plan file path>`.
@@ -392,14 +392,13 @@ parked-with-ruling at the cap.
 
 The final whole-branch review gets a package too: run
 `scripts/review-package PLAN_FILE MERGE_BASE HEAD` (MERGE_BASE = the commit the
-branch started from, e.g. `git merge-base main HEAD`) and include the
-printed path in the final review dispatch, so the final reviewer reads
-one file instead of re-deriving the branch diff with git commands. Dispatch
-on the most capable available model (see Model Selection), using
-superpowers:requesting-code-review's
-[code-reviewer.md](../requesting-code-review/code-reviewer.md). Point it at
-the ledger's deferred-minor and parked lines so it can triage which must be
-fixed before merge.
+branch started from, e.g. `git merge-base main HEAD`) and include the printed
+path in the final review dispatch, so the final reviewer reads one file instead
+of re-deriving the branch diff with git commands. Dispatch on the most capable
+available model (see Model Selection). Give the reviewer the plan's global
+constraints, the review package, and the ledger's deferred-minor and parked
+lines. If a code-review skill is installed, use it; otherwise ask for an
+independent correctness, regression, security, and maintainability review.
 
 If the final whole-branch review returns findings, dispatch ONE fix subagent
 with the complete findings list — not one fixer per finding.
@@ -409,18 +408,16 @@ Then run exactly one scoped re-review of the fix wave
 (`scripts/review-package PLAN_FILE FIX_BASE HEAD` over the fix range,
 [re-review-prompt.md](re-review-prompt.md)).
 Adjudicate any residual findings as in the task loop's breaker: park with
-rulings, or stop on load-bearing ones. There is no second fix wave —
-residual load-bearing findings surface to your human partner when
-finishing-a-development-branch presents the options.
+rulings, or stop on load-bearing ones. There is no second fix wave; residual
+load-bearing findings surface to the human partner under the repository's
+delivery policy.
 
 ## Finish
 
-When the final whole-branch review is clean and its fixes are merged,
-delete this plan's workspace (`rm -rf <workspace>`) — the git history is
-the record now. Sibling directories belong to other plans; leave them
-alone.
-
-Use superpowers:finishing-a-development-branch.
+When the final whole-branch review is clean and its fixes are merged, retire
+this plan's scratch workspace only when repository policy or the user permits
+it. Leave sibling plan directories alone. Then follow the repository's branch,
+review, and delivery policy; do not require an external finishing skill.
 
 ## Common Rationalizations
 
@@ -440,9 +437,9 @@ Use superpowers:finishing-a-development-branch.
 ```
 You: I'm using Subagent-Driven Development to execute this plan.
 
-[Setup: worktree verified]
-[Read plan file once: docs/superpowers/plans/feature-plan.md]
-[Resolve workspace: scripts/sdd-workspace docs/superpowers/plans/feature-plan.md — no ledger inside, fresh start]
+[Setup: approved workspace verified]
+[Read plan file once: <plan-file>]
+[Resolve workspace: scripts/sdd-workspace <plan-file> — no ledger inside, fresh start]
 [Create todos for all tasks]
 
 Task 1: Hook installation script
@@ -497,7 +494,7 @@ Re-reviewer: Missing progress reporting — ADDRESSED (src/recovery.js:41).
 [Run review-package PLAN_FILE MERGE_BASE HEAD; dispatch final code-reviewer, most capable model]
 Final reviewer: All requirements met. Deferred minors triaged: none block merge.
 
-[Delete this plan's workspace — the record now lives in git]
+[Retire this plan's workspace only when repository policy permits]
 
-Done! Using superpowers:finishing-a-development-branch.
+Done! Follow the repository delivery policy.
 ```

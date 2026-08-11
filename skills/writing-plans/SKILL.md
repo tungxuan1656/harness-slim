@@ -1,6 +1,6 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Use when you have a spec or requirements for a multi-step task and need an implementation plan before touching code. Reuse the repository's canonical plan location and active feature record when present.
 ---
 
 # Writing Plans
@@ -13,10 +13,22 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
-**Context:** If working in an isolated worktree, it should have been created via the `superpowers:using-git-worktrees` skill at execution time.
+## Select the plan artifact
 
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
+Read `AGENTS.md`, existing plans, and active work records before creating a
+plan. Reuse the repository's canonical plan path.
+
+- When Harness Slim is active, create `docs/plans/feat-<id>.md` for a
+  multi-step feature and link it from `features/feat-<id>.md`.
+- Otherwise reuse the maintained plan location and tracker already used by the
+  repository.
+- If no plan owner or location is clear, ask `agent-docs-architect` when it is
+  installed to map it before writing. Otherwise surface the path decision and
+  do not create `docs/superpowers/` as a fallback.
+
+Use an isolated workspace only when the repository policy, task risk, or user
+scope calls for one. Use native git worktree commands when available; do not
+require another skill to create it.
 
 ## Scope Check
 
@@ -58,7 +70,7 @@ independently testable deliverable.
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Execution:** Follow the repository's implementation and verification rules. Use `subagent-driven-development` or `executing-plans` only when installed and appropriate. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** [One sentence describing what this builds]
 
@@ -151,18 +163,13 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 
 After saving the plan, offer execution choice:
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+**"Plan complete and saved to `<plan-path>`. Choose an execution approach:**
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+**1. Subagent-driven** - Use `subagent-driven-development` when it is installed, tasks are independent, and the user authorizes delegated execution.
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+**2. Inline execution** - Execute in this session, optionally with `executing-plans`, using the repository's verification and branch rules.
 
 **Which approach?"**
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
-
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Batch execution with checkpoints for review
+Do not require either optional skill. Record the selected approach in the
+feature or handoff record when the repository has one.

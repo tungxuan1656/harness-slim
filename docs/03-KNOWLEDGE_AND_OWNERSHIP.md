@@ -23,7 +23,7 @@ policy.
 |---|---|---|
 | `harness-slim` | Compact harness artifacts and their consistency | Update the smallest harness source supported by evidence |
 | `harness-slim-review` | Evidence and findings only | Never mutate unless remediation is explicitly requested later |
-| `harness-slim-gardenring` | One scoped cleanup batch and a narrow guardrail | Change only confirmed drift; preserve public behavior unless scope says otherwise |
+| `repo-gardening` | One scoped cleanup batch and a narrow guardrail | Change only confirmed repository drift; update documents only as direct cleanup residue |
 | `agent-docs-architect` | Artifact map, canonical ownership, routes, lifecycle, and writer handoff | Propose by default; apply only after the user asks |
 | `agent-docs-writer` | Evidence gathering, structure, prose, diagrams, and document-level quality | Write only the selected document responsibility |
 

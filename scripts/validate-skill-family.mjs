@@ -29,7 +29,7 @@ const skills = [
     agent: true,
   },
   {
-    name: "harness-slim-gardenring",
+    name: "repo-gardening",
     files: ["agents/openai.yaml", "references/cleanup-rubric.md"],
     agent: true,
   },
@@ -66,6 +66,7 @@ const removedSkills = [
   "harness-verify",
   "harness-garden",
   "harness-docs-guide",
+  "harness-slim-gardenring",
 ];
 
 function assert(condition, message) {
