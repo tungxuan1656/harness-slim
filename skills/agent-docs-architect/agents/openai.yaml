@@ -1,4 +1,4 @@
 interface:
-  display_name: "Agent Docs Architect"
-  short_description: "Design scalable documentation systems for agents"
-  default_prompt: "Use $agent-docs-architect to propose the smallest agent-facing documentation architecture this repository needs."
+  display_name: "Repository Knowledge Architect"
+  short_description: "Plan agent-facing repository knowledge"
+  default_prompt: "Use $agent-docs-architect to assess this repository and propose its agent-facing knowledge system, including documents, paths, ownership, and maintenance."

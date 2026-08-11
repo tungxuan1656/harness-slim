@@ -1,152 +1,164 @@
 ---
 name: agent-docs-architect
 description: >-
-  Design or audit agent-facing repository documentation architectures based on
-  project scale, topology, domain complexity, risk, change rate, and coordination
-  needs. Use when deciding which navigation, architecture, design, product,
-  execution-plan, generated-reference, or cross-cutting documents a repository
-  needs; how those artifacts route to one another; where each class of truth
-  belongs; or how an existing docs tree should grow without becoming an
-  encyclopedia. Pair with agent-docs-writer to create or rewrite document
-  content. Do not use for writing one already-selected document or for ordinary
-  code changes with no documentation-architecture problem.
+  Design or audit the agent-facing repository knowledge system for a software
+  project. Use when a user needs to decide which product, domain, architecture,
+  integration, data, security, reliability, execution, generated-reference, or
+  navigation documents a repository needs; their paths, names, ownership,
+  reading routes, and maintenance contracts; or how that system should change
+  with project stage, topology, stack, integrations, risk, and coordination.
+  Use before writing a multi-document documentation set. Pair with
+  agent-docs-writer to create approved documents. Do not use to write one
+  already-selected document or to make unapproved product or architecture
+  decisions.
 ---
 
 # Agent Docs Architect
 
-Design the smallest repository knowledge system that lets an agent find and use
-the right truth without loading the whole repository into context.
+Design the smallest repository knowledge system that lets an agent find the
+right truth, identify missing decisions, and act without loading the whole
+repository into context.
 
-## Divide responsibility
+## Promise and boundary
 
-| Skill | Owns |
+Return an evidence-backed answer to: what knowledge must live with this
+repository, which document owns it, where the document belongs, when an agent
+must read it, and how it stays current.
+
+Use BA and solution-architecture lenses to discover information needs. Do not
+act as the product owner or solution architect.
+
+| This skill does | This skill does not |
 |---|---|
-| `agent-docs-architect` | Artifact selection, information ownership, routes, hierarchy, lifecycle, and maintenance contracts |
-| `agent-docs-writer` | Evidence gathering, document structure, wording, diagrams, concision, and document-level quality |
-
-Use this skill first when the document set is unknown. Use `agent-docs-writer`
-directly when the requested document and its responsibility are already clear.
+| Identify missing product rules, technical decisions, and operating constraints | Invent or approve those rules and decisions |
+| Recommend a product spec, decision record, contract, or guide | Choose product behavior, system architecture, or a technology |
+| State open questions and their decision owner | Present assumptions as accepted truth |
+| Design artifact ownership, paths, routes, and lifecycle | Write document prose or templates owned by `agent-docs-writer` |
 
 ## Apply the core rules
 
-- Treat any example tree as a catalog of possibilities, not a required scaffold.
-- Create a document only for a demonstrated navigation, knowledge, coordination,
-  or risk problem.
-- Give each durable fact one canonical owner. Link to that owner elsewhere.
+- Give every durable fact one canonical owner. Link to that owner elsewhere.
 - Keep `AGENTS.md` as a short router and repository-wide rule surface.
-- Separate durable knowledge from active work state and historical records.
-- Separate generated truth from human-maintained interpretation.
-- Reuse repository-native names and artifacts when they already satisfy the
-  required capability.
-- Prefer progressive disclosure: router -> one focused document -> code and
+- Separate durable knowledge, active work, history, generated truth, and
+  external references.
+- Use a documented default convention for a new or materially incomplete
+  repository. Treat it as a baseline, not a quota.
+- Reuse a repository-native artifact when it already owns the required truth.
+  Do not rename it only for uniformity.
+- Create an artifact for a demonstrated failure, credible risk, or required
+  decision. Do not create empty directories, placeholders, or generic guides.
+- Record unresolved facts as questions with a decision owner. Do not fill gaps
+  from typical industry practice.
+- Prefer progressive disclosure: router -> one focused source -> code and
   tests.
-- Do not create empty directories, placeholder documents, or speculative rules.
 
 ## Run the workflow
 
-### 1. Ground the assessment
+### 1. Inventory evidence
 
 Inspect before recommending a structure:
 
 1. Read git status and preserve unrelated work.
 2. Inspect the root tree, manifests, workspaces, entry points, tests, CI, and
    deployment shape.
-3. Find agent instructions, READMEs, architecture material, specifications,
-   plans, decision records, generated references, and external knowledge links.
-4. Identify concrete failures: agents cannot locate code, infer boundaries,
-   recover product intent, resume work, or verify whether guidance is current.
-5. Classify relevant evidence as `Observed`, `Intended`, `Proposed`, or
-   `Uncertain` when code and documentation disagree.
+3. Identify runtimes, frameworks, data stores, interfaces, event paths,
+   external systems, generated surfaces, and operational tooling.
+4. Find existing instructions, READMEs, specifications, decision records,
+   plans, schemas, runbooks, issue trackers, and external knowledge sources.
+5. Classify relevant facts as `Observed`, `Intended`, `Proposed`, or
+   `Uncertain` when sources disagree.
 
-Do not infer project scale from lines of code alone.
+For a greenfield repository, inventory the supplied brief, constraints, and
+accepted decisions. Mark all unconfirmed design as `Proposed` or `Uncertain`.
 
-### 2. Select a scale profile
+### 2. Assess knowledge pressure
 
-Read [scale profiles](references/scale-profiles.md). Assess topology, domain
-count, coordination, risk, work duration, change rate, and generated surfaces.
+Read [assessment and profiles](references/scale-profiles.md). Assess project
+stage, product and domain complexity, topology, stack diversity, integrations,
+data, risk, delivery horizon, coordination, change rate, and generated
+surfaces.
 
-Choose the nearest profile as a starting point. Promote only the capabilities
-justified by stronger pressure signals. Remove any artifact that lacks a clear
-failure mode.
+Select the nearest delivery profile only as a baseline. Promote or demote each
+capability from its own pressure signals. Do not infer documentation needs from
+lines of code alone.
 
-### 3. Assign canonical ownership
+### 3. Find truth and decision gaps
 
-Inventory existing artifacts before proposing new ones. For each class of truth:
+Read the [artifact catalog](references/artifact-catalog.md). For every required
+knowledge class:
 
-1. Name its current source.
-2. Decide whether the source is canonical, duplicated, stale, missing, or
-   external-only.
-3. Preserve a useful existing source even when its filename differs from the
-   catalog.
-4. Propose migration or retirement only when duplicate ownership creates a
-   concrete conflict.
+1. Name the current source and its status: canonical, duplicated, stale,
+   missing, inaccessible, or external-only.
+2. Identify the concrete failure or risk if an agent cannot access the truth.
+3. Distinguish a missing document from a missing decision.
+4. For a missing decision, record a concise question, affected artifacts, and
+   decision owner instead of proposing an answer.
+5. Preserve useful existing sources even when their filenames differ from the
+   default convention.
 
-Read the [artifact catalog](references/artifact-catalog.md) to choose capabilities
-and their default ownership boundaries.
+### 4. Select artifacts and conventions
 
-### 4. Design the reading routes
+Read [repository conventions](references/repository-conventions.md). Start
+with the baseline for the selected profile, then retain only artifacts justified
+by the assessment. Use the convention's names and paths for new artifacts unless
+an existing repository convention is stronger.
 
-Start with the ordinary route:
+Treat cross-cutting guides as conditional. For example, create security,
+reliability, data, frontend, or observability guidance only when a shared,
+repository-specific invariant needs one canonical owner.
+
+### 5. Design reading routes and maintenance
+
+For each common task, define a shallow route:
 
 ```text
 agent instruction entry point
   -> one focused document when needed
-  -> relevant code and tests
+  -> relevant code, contract, and tests
   -> proportional verification
 ```
 
-Add a documentation index only when several focused documents need routing. Add
-nested instruction files only when a subtree has genuinely different rules or
-tooling. Keep global cross-cutting rules at the shallowest canonical level.
+Add an index only when several focused documents need selection. Add nested
+instructions only when a subtree has genuinely different tooling or invariants.
+For each volatile artifact, define the event, owner, generator, or mechanical
+check that keeps it current.
 
-For each common task type, name the first document to read and the condition for
-reading deeper material.
+### 6. Produce a blueprint
 
-### 5. Produce a blueprint
-
-Use [blueprint format](references/blueprint-format.md). Include:
-
-- the selected scale profile and pressure signals;
-- capabilities to keep, create, revise, move, retire, or omit;
-- a proposed tree containing only justified artifacts;
-- one canonical responsibility and `Read when` route per artifact;
-- lifecycle, freshness source, and mechanical validation where applicable;
-- a document-by-document handoff for `agent-docs-writer`.
+Use [blueprint format](references/blueprint-format.md). Include the assessment,
+knowledge gaps, proposed tree, artifact contracts, routes, intentional
+omissions, maintenance contract, and writer handoff.
 
 Default to a proposal. Do not mutate repository documentation unless the user
 asks to apply the blueprint.
 
-### 6. Apply through the writer
+### 7. Apply through the writer
 
-When the user asks to apply the blueprint:
+When the user accepts the blueprint:
 
-1. Lock the accepted artifact map and ownership table.
-2. Use `agent-docs-writer` for each new or revised document.
+1. Lock the artifact map, ownership table, open decisions, and naming
+   convention.
+2. Use `agent-docs-writer` for each approved document.
 3. Give the writer the artifact responsibility, evidence sources, required
    routes, lifecycle, and size constraints.
-4. Create documents in dependency order: canonical truth, focused guides,
-   indexes, then the root router.
-5. Re-audit the final graph for duplicate truth, broken routes, empty artifacts,
-   and mixed durable or temporary state.
+4. Create canonical truth before indexes and the root router.
+5. Re-audit the final graph for duplicated truth, broken routes, unlabelled
+   uncertainty, empty artifacts, and mixed durable or temporary state.
 
 If `agent-docs-writer` is unavailable, return the blueprint and handoff package.
 Do not invent a competing document-writing standard inside this skill.
 
 ## Keep scope narrow
 
-This skill does not decide product behavior, software architecture, security
-policy, feature priority, or engineering standards. It determines where accepted
-truth belongs and how agents discover it.
-
 Do not:
 
-- copy external chat or documents into the repository without identifying the
-  durable facts and their owner;
-- create `DESIGN.md`, `SECURITY.md`, `RELIABILITY.md`, or similar guides only
-  because they appear in an example tree;
-- replace an issue tracker, schema generator, or existing documentation system
-  without an explicit migration decision;
 - turn a documentation architecture request into a broad codebase rewrite;
+- create a full documentation tree merely because a large-project baseline
+  includes it;
+- replace an issue tracker, schema generator, or external documentation system
+  without an explicit migration decision;
+- copy external material into the repository without a canonical ownership and
+  freshness decision;
 - prescribe document prose, sentence style, or templates owned by
   `agent-docs-writer`.
 
@@ -154,14 +166,15 @@ Do not:
 
 Before delivery, verify that:
 
-- the proposed size follows repository pressure, not a copied folder tree;
-- every artifact prevents a named failure and owns one class of truth;
-- existing useful artifacts are reused;
-- ordinary tasks require at most one focused document after the entry point;
-- durable knowledge, active plans, history, generated truth, and external
-  references have distinct ownership;
-- each volatile artifact has a freshness source or maintenance owner;
-- indexes route instead of summarizing or duplicating their children;
-- the writer handoff is complete enough to draft without choosing the
-  documentation architecture again.
-
+- each recommendation follows an observed need, credible risk, or explicitly
+  stated greenfield constraint;
+- project size is not the sole determinant of the document set;
+- every artifact owns one class of truth and has an appropriate lifecycle;
+- unresolved product or architecture choices remain visible as open decisions;
+- the default convention is applied only where no adequate native convention
+  exists;
+- ordinary tasks need at most one focused document after the entry point;
+- generated and external sources have reproducibility or freshness contracts;
+- indexes route instead of duplicate their children;
+- the writer handoff is sufficient to draft without redesigning the knowledge
+  system.

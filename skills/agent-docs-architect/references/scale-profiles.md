@@ -1,103 +1,106 @@
-# Scale Profiles
+# Assessment and Delivery Profiles
 
-Use these profiles as starting points, not quotas. Lines of code are weak hints.
-Topology, domain complexity, risk, and concurrent agent work can justify a
-higher profile in a small repository.
+Use this assessment to discover documentation needs. A profile supplies a
+starting baseline; each capability still requires a specific pressure signal.
 
-## Pressure signals
+## Assessment dimensions
 
-| Dimension | Lower pressure | Higher pressure |
-|---|---|---|
-| Topology | One runtime and one data store | Monorepo, several deployables, queues, or external systems |
-| Domain | One obvious workflow | Several business domains or state machines |
-| Coordination | One maintainer or agent at a time | Concurrent teams, agents, worktrees, or ownership boundaries |
-| Risk | Internal and reversible | Security, privacy, money, compliance, or availability impact |
-| Work horizon | Small tasks finish in one session | Multi-session plans, migrations, or long-running programs |
-| Change rate | Stable structure and dependencies | Frequent topology, contract, or dependency changes |
-| Generated surface | Few inspectable interfaces | Large schemas, APIs, configuration, or generated clients |
+| Dimension | Lower pressure | Higher pressure | Documentation pressure |
+|---|---|---|---|
+| Project stage | Stable or short-lived | Greenfield, migration, legacy recovery | Make assumptions, decisions, and transition state explicit |
+| Product and domain | One obvious workflow | Several domains, rules, or state machines | Product specs, glossary, domain maps |
+| Topology | One runtime and store | Monorepo, services, queues, deployment planes | Architecture, subsystem maps, integration contracts |
+| Stack | One familiar stack | Polyglot, client plus server plus infra | Scoped guides and stack-specific verification |
+| Integrations | Few local calls | APIs, webhooks, identity, payment, async events | Interface contracts, ownership, failure behavior |
+| Data | Simple local data | Shared schemas, migrations, PII, lineage | Generated references, data ownership, retention rules |
+| Risk | Internal and reversible | Security, privacy, money, compliance, availability | Security, reliability, operational constraints |
+| Delivery horizon | One-session tasks | Multi-stage work, migrations, programmes | Execution plans, decision history, handoffs |
+| Coordination | One maintainer | Teams, agents, worktrees, ownership boundaries | Routes, ownership, local instructions, indexes |
+| Change rate | Stable contracts | Frequent topology, dependency, or schema changes | Freshness checks and generated truth |
+| Generated surface | Small and inspectable | Large APIs, schemas, config, clients | Reproducible generated references |
 
-Select the nearest profile, then add only capabilities tied to specific pressure
-signals.
+Do not use line count as a decision rule. A small payment service can require
+more documentation than a large internal utility.
 
-## Profile A: compact
+## Delivery profiles
 
-Typical shape: one application, one main domain, one maintainer, low risk, and an
-obvious code layout. Often below 10k lines, but size does not decide the profile.
+### Compact
 
-Default capabilities:
+Typical shape: one runtime, one main workflow, one maintainer, low risk, and an
+obvious layout.
 
-- one concise agent instruction entry point;
-- routes to the existing README, code, tests, and verification commands;
-- an architecture overview only when topology or boundaries are not obvious.
+Start with:
 
-Usually omit a docs index, category directories, plan archive, quality score,
-and cross-cutting guides.
+- a concise instruction entry point when agents need one;
+- routes to the README, code, tests, and verification commands;
+- an architecture overview only when boundaries are costly to infer.
 
-## Profile B: growing
+Usually omit indexes, category directories, plan archives, health scores, and
+cross-cutting guides.
 
-Typical shape: several components or workflows, recurring feature work, and a
-small team. Often 10k-50k lines.
+### Growing
 
-Default capabilities:
+Typical shape: several workflows or components, recurring feature work, and a
+small team.
 
-- concise agent instructions;
-- an architecture overview;
-- a docs index when several focused documents exist;
-- focused subsystem or product documents for facts unsafe to infer;
-- execution plans only for multi-session work.
+Start with:
 
-Add design decisions, generated references, or cross-cutting guides only when
-the repository has that knowledge class.
+- root instructions and an architecture overview;
+- focused product, domain, subsystem, or decision documents where facts are
+  unsafe to infer;
+- an index only when several documents require routing;
+- execution plans for multi-session work.
 
-## Profile C: established
+Add contracts, generated references, or cross-cutting guides only when their
+corresponding pressure exists.
 
-Typical shape: multiple deployables or domains, concurrent work, non-trivial
-operational risk, and long-lived change programs. Often 50k-200k lines.
+### Established
 
-Default capabilities:
+Typical shape: several deployables or domains, concurrent work, non-trivial
+operational risk, and long-running changes.
 
-- root routing and architecture overview;
-- a documentation index with `Read when` routes;
-- indexed design decisions and product or domain specifications;
+Start with:
+
+- root routing, an architecture map, and a documentation index;
+- indexed design and product or domain material;
 - active and completed execution plans when repository-local planning is
   canonical;
-- focused subsystem and cross-cutting guides for shared invariants;
-- generated technical references for large machine-derived surfaces;
-- explicit freshness checks for volatile artifacts.
+- subsystem, integration, data, and cross-cutting guides for shared invariants;
+- generated references with freshness checks.
 
-Do not create every category when an external system remains canonical.
-
-## Profile D: federated
+### Federated
 
 Typical shape: a monorepo, many domains or teams, several deployment planes,
-concurrent agents, and strong reliability or compliance requirements. Often
-above 200k lines.
+concurrent agents, and strong reliability or compliance requirements.
 
-Default capabilities:
+Start with:
 
 - a thin root router and root architecture map;
-- domain-local indexes or scoped instructions where rules differ;
-- explicit ownership for design, product, operations, security, and reliability
-  truth;
-- durable plan history and debt routing when work spans teams or quarters;
-- generated references with reproducible generation and freshness checks;
-- documentation health signals and automated gardening.
+- domain-local indexes or scoped instructions when rules differ;
+- explicit ownership for product, design, data, operations, security, and
+  reliability truth;
+- durable decision and plan history when work spans teams or quarters;
+- reproducible generated references, health signals, and automated gardening
+  when someone owns the measurement loop.
 
-Keep local reading routes shallow. Federation is not permission to duplicate
-root rules in every subtree.
+Keep routes shallow. Federation does not justify duplicating root rules in each
+subtree.
 
-## Promotion rules
+## Promotion and demotion
 
-Promote a capability when at least one concrete failure exists:
+Promote a capability when an agent cannot safely discover a fact, or when a
+credible risk requires a durable constraint. Common triggers include:
 
-- agents repeatedly choose the wrong code area;
-- intended behavior cannot be recovered from code and tests;
-- active work cannot resume safely across sessions;
-- cross-cutting constraints are applied inconsistently;
-- volatile reference material becomes stale without automation;
-- several documents exist but agents cannot choose the next one;
-- concurrent ownership causes conflicting edits or duplicated truth.
+- business behavior cannot be recovered from code and tests;
+- an external contract, event, or schema has an unclear owner;
+- an architectural choice has meaningful alternatives or consequences;
+- active work cannot resume across sessions;
+- security, privacy, money, or availability constraints are non-local;
+- a large generated surface is too costly to inspect directly;
+- several documents exist but agents cannot select the next source;
+- concurrent ownership causes contradictory edits or duplicated truth.
 
-Demote or omit a capability when its information is obvious, already canonical
-elsewhere, or cannot be maintained.
-
+Demote or omit a capability when its information is obvious, canonical and
+accessible elsewhere, or cannot be maintained. For a greenfield repository,
+use an accepted constraint or credible risk as evidence; mark unaccepted design
+as `Proposed` or `Uncertain`.
