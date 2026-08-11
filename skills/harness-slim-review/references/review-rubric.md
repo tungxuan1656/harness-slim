@@ -6,14 +6,15 @@ Apply the smallest set of criteria that lets an agent start, stay scoped, verify
 
 | Criterion | Pass condition |
 |---|---|
-| Startup | Names a standard verification command, state source, active feature, progress, and relevant documents. |
+| Assessment | Requires project scale, task complexity, and impact to justify feature, plan, and progress artifacts. |
+| Startup | Names the feature-work verification command, state source, selected feature, progress, and relevant documents without imposing that startup on lightweight work. |
 | Baseline | Records failed baseline checks and limits repair to authorized scope. |
 | State | Defines allowed statuses and zero-or-one active feature. |
-| Scope | Binds work to feature scope and acceptance criteria. |
+| Scope | Binds feature work to feature scope and acceptance criteria without requiring all work to become a feature. |
 | Dependencies | Requires dependencies to complete before activation. |
-| Planning | Keeps small plans inline; routes large, multi-session, or multi-agent plans to `docs/plans/`. |
+| Planning | Keeps bounded tracked work inline; routes only substantial work needing durable phases, coordination, recovery, or risk control to `docs/plans/`. |
 | Done | Requires acceptance, verification evidence, and session record. |
-| Handoff | Requires status, blockers, and one next action at session end. |
+| Handoff | Requires status, blockers, and one next action when feature execution state materially changes. |
 | Escalation | Routes unclear requirements, ownership, architecture/product decisions, and repeated failures to documents or the user. |
 
 Do not require commit, branch, review, release, or tool policy unless repository evidence or the user requires it. Keep repository-wide rules separate from feature state and durable architecture facts.
@@ -35,6 +36,7 @@ Do not require commit, branch, review, release, or tool policy unless repository
 | Criterion | Pass condition |
 |---|---|
 | Append-only | New session records are added below the final template note without rewriting prior history. |
+| Applicability | Progress exists only for repository-local feature work with a material result, blocker, handoff, or next action. |
 | Continuity | Each relevant block records completed work, evidence, blockers, and next action. |
 | Ownership | Progress does not duplicate feature scope or durable architecture decisions. |
 

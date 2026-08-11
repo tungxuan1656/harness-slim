@@ -30,13 +30,13 @@ Read the full [review rubric](references/review-rubric.md). Assess only requirem
 
 Check in this order:
 
-1. `AGENTS.md`: startup path, scope boundaries, lifecycle, verification, and escalation.
+1. `AGENTS.md`: task assessment, conditional startup, scope boundaries, lifecycle, verification, and escalation.
 2. State: index schema, feature status, dependencies, and matching feature documents.
 3. Work records: feature scope, acceptance, plan location, evidence, handoff, and append-only progress.
 4. `init.sh`: Bash-only implementation, evidence-backed commands, safe order, failure behavior, and workspace coverage.
 5. Cross-file consistency and unnecessary process.
 
-Missing a needed artifact is a finding. A repository that does not need a particular phase or document is not defective when the omission is explicit and evidence supports it.
+Missing a needed artifact is a finding. A repository that does not need a feature, plan, progress entry, phase, or document is not defective when the omission is explicit and evidence supports it.
 
 ## Rate findings
 

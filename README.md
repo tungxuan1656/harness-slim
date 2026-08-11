@@ -18,14 +18,15 @@ profile that fits the work instead of installing every skill.
 | Skill | Use when | Primary result |
 |---|---|---|
 | `harness-slim` | A repository needs a compact, feature-driven operating harness | `AGENTS.md`, feature state, progress, and evidence-backed `init.sh` |
+| `harness-task` | Incoming work in a Harness Slim repository needs the lightest safe artifact level | No feature, an inline feature plan, or a separate linked plan |
 | `harness-slim-review` | You need an evidence-based assessment before changing a harness | Read-only verdict and prioritized fixes |
 | `repo-gardening` | Proven code, configuration, dependency, or related-artifact drift needs a safe cleanup | One small, verified cleanup batch and a guardrail when justified |
 | `agent-docs-architect` | The documentation structure, ownership, or routes are unclear | A minimal documentation blueprint and writer handoff |
 | `agent-docs-writer` | A selected agent-facing document needs to be written or revised | Concise, routed, evidence-based documentation |
 
-Use the narrowest matching skill. There is no router skill and no generated
-fallback phase system: each skill is independently invoked and owns a focused
-job.
+Use the narrowest matching skill. `harness-task` is an intake policy that
+chooses feature and plan artifacts; it does not orchestrate other skills. There
+is no router skill or generated fallback phase system.
 
 ## Optional companion profiles
 
@@ -41,18 +42,20 @@ the core contracts or create their own documentation tree.
 | Discovery | `find-skills` | Find an additional capability outside this family |
 
 When these skills create or update an artifact, they must first reuse the
-repository's documented owner and path. With Harness Slim, a multi-step plan
-lives at `docs/plans/feat-<id>.md` and is linked from its feature record. Do
-not create `docs/superpowers/` as a fallback. If an artifact's owner or path is
-unclear, use `agent-docs-architect`; if it is known, use `agent-docs-writer`.
+repository's documented owner and path. With Harness Slim, substantial work
+that needs durable phases, coordination, recovery, or risk control uses
+`docs/plans/feat-<id>.md` linked from its feature record. Do not create
+`docs/superpowers/` as a fallback. If an artifact's owner or path is unclear,
+use `agent-docs-architect`; if it is known, use `agent-docs-writer`.
 
 ## Typical flow
 
 ```text
-Need a working agent harness     -> harness-slim
-Need to assess that harness      -> harness-slim-review
-Need to remove proven drift      -> repo-gardening
-Need to choose the docs system   -> agent-docs-architect
+Need a working agent harness        -> harness-slim
+Need to size feature/plan artifacts -> harness-task
+Need to assess that harness         -> harness-slim-review
+Need to remove proven drift         -> repo-gardening
+Need to choose the docs system      -> agent-docs-architect
 Need to write one chosen document -> agent-docs-writer
 ```
 
@@ -81,16 +84,19 @@ progress.md
 init.sh
 ```
 
-`AGENTS.md` routes an agent through the active feature and relevant documents.
-The index uses `todo`, `active`, `blocked`, and `done`; keep zero or one feature
-active. `progress.md` is append-only session state: add each record below its
-final template note without editing older records. `init.sh` is an editable
-Bash workflow based only on observed repository commands.
+`AGENTS.md` requires an assessment of project scale, task complexity, and
+impact before feature, plan, or progress artifacts are created. The index uses
+`todo`, `active`, `blocked`, and `done`; keep zero or one feature active.
+`progress.md` is append-only feature state: add a record below its final
+template note only when a material result, blocker, handoff, or next action
+changes. `init.sh` is an editable Bash workflow based only on observed
+repository commands.
 
-For a small task, keep the plan in its feature record. For multi-step,
-multi-session, or multi-agent work, link `docs/plans/feat-<id>.md` from that
-record. Existing repository-native documents, commands, and trackers remain
-canonical when they already serve the needed purpose.
+Lightweight work needs no feature. Keep bounded tracked work in its feature
+record. For substantial work that needs a durable plan, link
+`docs/plans/feat-<id>.md` from that record. Existing repository-native
+documents, commands, and trackers remain canonical when they already serve the
+needed purpose.
 
 ## Install
 
@@ -99,6 +105,7 @@ Install only the skills you need:
 ```bash
 npx skills add tungxuan1656/harness-slim
 npx skills add tungxuan1656/harness-slim --skill harness-slim
+npx skills add tungxuan1656/harness-slim --skill harness-task
 npx skills add tungxuan1656/harness-slim --skill harness-slim-review
 npx skills add tungxuan1656/harness-slim --skill repo-gardening
 npx skills add tungxuan1656/harness-slim --skill agent-docs-architect
@@ -109,6 +116,7 @@ Example prompts:
 
 ```text
 Use $harness-slim to create a concise evidence-based harness for this repository.
+Use $harness-task to choose the lightest safe feature and plan artifacts for this request.
 Use $harness-slim-review to audit the current harness without modifying files.
 Use $repo-gardening to remove one verified batch of duplicated helpers.
 Use $agent-docs-architect to propose the smallest documentation architecture we need.
@@ -125,10 +133,10 @@ node scripts/validate-skill-family.mjs
 bash -n skills/harness-slim/templates/init.sh
 ```
 
-The layout check verifies the five active skill packages, their required local
-resources, agent metadata where supplied, and the architect evaluation corpus.
-It does not claim that model behavior has passed; validate meaningful changes
-against representative repositories.
+The layout check verifies the six active skill packages, their required local
+resources, agent metadata where supplied, and the task and architect evaluation
+corpora. It does not claim that model behavior has passed; validate meaningful
+changes against representative repositories.
 
 The contributor-oriented design notes live in [docs/README.md](docs/README.md).
 

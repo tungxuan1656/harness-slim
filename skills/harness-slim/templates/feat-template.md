@@ -22,7 +22,7 @@
 
 ## Plan
 
-<!-- Keep small, single-session steps here. For complex, multi-session, or multi-agent work, use `docs/plans/{{FEATURE_ID}}.md`. -->
+<!-- Keep bounded tracked work here. For substantial work that needs durable phases, coordination, recovery, or risk control, use `docs/plans/{{FEATURE_ID}}.md`. -->
 
 1. <Step.>
 2. <Step.>

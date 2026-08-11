@@ -11,6 +11,10 @@ description: >-
 
 Create only the knowledge and verification artifacts that let an agent start, stay scoped, verify work, and resume safely.
 
+Use `harness-task` when installed to assess incoming work before creating or
+updating feature, plan, or progress artifacts. The assessment is an intake
+policy, not orchestration of this or any other skill.
+
 ## Artifacts
 
 | File | Owns |
@@ -45,11 +49,11 @@ When a harness already exists:
 - Update the smallest source of truth that needs the new rule.
 - Do not overwrite a managed file without explicit user approval.
 
-Keep zero or one feature `active`. Do not activate `todo` work without user scope.
+Keep zero or one feature `active`. Do not activate `todo` work without user scope. Do not require a feature merely because the harness provides feature artifacts.
 
-Create `features/feat-template.md` from `templates/feat-template.md`. For a small, single-session feature, copy it to `features/feat-<id>.md` and keep its plan inline.
+Create `features/feat-template.md` from `templates/feat-template.md`. Create or update a feature only when project scale, task complexity, and impact justify durable tracking. Keep the plan inline for bounded tracked work.
 
-For multi-step, multi-session, or multi-agent work:
+For substantial work that needs durable phases, coordination, recovery, or risk control:
 
 1. Create `docs/plans/feat-<id>.md`.
 2. Link it from the feature file.
@@ -57,7 +61,7 @@ For multi-step, multi-session, or multi-agent work:
 
 Keep durable architecture and product facts in their canonical project documents. Do not duplicate them in feature or progress records.
 
-Keep `progress.md` append-only: retain its template at the top and add each new block below the final template note, without editing older blocks.
+Keep `progress.md` append-only: retain its template at the top and add a new block below the final template note only when repository-local feature work has a material result, blocker, handoff, or next action. Do not edit older blocks.
 
 ## Write init.sh from evidence
 
@@ -90,7 +94,7 @@ For non-Node repositories, write equivalent Bash commands only when their tools 
 ## Finish
 
 1. Run the relevant commands from `init.sh`.
-2. Record evidence in the feature file and `progress.md`.
+2. For feature work, record evidence in the feature file and record progress only when execution state materially changed.
 3. Keep unknowns and blockers explicit.
 4. Explain which repository evidence determined the harness.
 

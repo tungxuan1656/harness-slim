@@ -4,13 +4,19 @@
 
 Detected stack: `{{PROJECT_STACK}}`
 
-## Start session
+## Assess the task
+
+Before creating or updating feature, plan, or progress artifacts, assess the task's project scale, complexity, and impact. Use no feature for lightweight work, an inline feature plan for bounded tracked work, and a separate linked plan only for substantial work.
+
+For work that does not need a feature, read only the relevant sources and run proportional verification without updating feature or progress state.
+
+## Start feature work
 
 1. Run `./init.sh`.
 2. Read `feature_index.json`.
-3. When a feature is active, read its file in `features/`.
+3. Read the selected feature file in `features/`.
 4. Read the latest relevant block in `progress.md`.
-5. Load only the documents linked by the active feature.
+5. Load only the documents linked by the selected feature.
 
 If baseline verification fails, record the failure. Fix it only when the current scope includes it.
 
@@ -19,16 +25,16 @@ If baseline verification fails, record the failure. Fix it only when the current
 - Keep at most one feature `active`. Zero active features means the repository is idle.
 - Use only `todo`, `active`, `blocked`, or `done` as feature status.
 - Start `todo` work only after the user selects or approves it.
-- Keep implementation inside the active feature's scope and acceptance criteria.
+- Keep feature work inside the active feature's scope and acceptance criteria.
 - Complete every dependency before activating its dependent feature.
 - Record scope, acceptance, evidence, and handoff in the feature file.
-- Record session results in `progress.md` below its final template note. Do not copy the feature scope there.
+- Record a feature result in `progress.md` only when the result, blocker, handoff, or next action materially changes. Do not copy feature scope there.
 - Update `init.sh` when verification commands or workspace modules change.
 
 ## Plans
 
-- Keep the plan inside `features/feat-<id>.md` for small, single-session work.
-- Create `docs/plans/feat-<id>.md` for multi-step, multi-session, or multi-agent work.
+- Keep the plan inside `features/feat-<id>.md` for bounded tracked work.
+- Create `docs/plans/feat-<id>.md` only for substantial work that needs durable phases, coordination, recovery, or risk control.
 - Link the external plan from the feature file.
 - Define agent and file ownership before parallel work starts.
 
@@ -37,7 +43,7 @@ If baseline verification fails, record the failure. Fix it only when the current
 - Read the relevant project document before making an architecture or product decision.
 - Ask the user when requirements, scope, ownership, or a repeated verification failure remain unclear.
 
-## Done
+## Feature done
 
 A feature is done only when:
 
@@ -46,11 +52,11 @@ A feature is done only when:
 - [ ] The feature file records verification evidence.
 - [ ] `progress.md` records the result and next action.
 
-## End session
+## End feature session
 
 1. Update the feature status and handoff.
-2. Add a new block below the final template note in `progress.md`; do not edit older blocks.
-3. Record blockers and one next action.
+2. When state materially changed, add a new block below the final template note in `progress.md`; do not edit older blocks.
+3. Record blockers and one next action when they exist.
 
 ## Verification
 

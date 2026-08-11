@@ -24,6 +24,17 @@ const skills = [
     metadata: true,
   },
   {
+    name: "harness-task",
+    files: [
+      "agents/openai.yaml",
+      "references/task-routing-matrix.md",
+      "evals/evals.json",
+    ],
+    agent: true,
+    evals: true,
+    implicit: true,
+  },
+  {
     name: "harness-slim-review",
     files: ["agents/openai.yaml", "references/review-rubric.md"],
     agent: true,
@@ -165,7 +176,7 @@ async function validateHarnessSlimContract(directory) {
   const featureTemplate = await readRequired(featureTemplatePath);
   assert(
     featureTemplate.includes(
-      "<!-- Keep small, single-session steps here. For complex, multi-session, or multi-agent work, use `docs/plans/{{FEATURE_ID}}.md`. -->",
+      "<!-- Keep bounded tracked work here. For substantial work that needs durable phases, coordination, recovery, or risk control, use `docs/plans/{{FEATURE_ID}}.md`. -->",
     ),
     `${featureTemplatePath}: plan guidance is incorrect`,
   );
@@ -197,6 +208,14 @@ async function validateHarnessSlimContract(directory) {
     !agentsTemplate.includes(".agents/README.md"),
     `${agentsTemplatePath}: AGENTS.md must not reference .agents/README.md`,
   );
+  assert(
+    agentsTemplate.includes("assess the task's project scale, complexity, and impact"),
+    `${agentsTemplatePath}: task assessment policy is missing`,
+  );
+  assert(
+    agentsTemplate.includes("run proportional verification without updating feature or progress state"),
+    `${agentsTemplatePath}: lightweight-work verification policy is missing`,
+  );
 }
 
 async function validateSkill(skill) {
@@ -211,7 +230,14 @@ async function validateSkill(skill) {
 
   if (skill.agent) {
     const agentPath = resolve(directory, "agents/openai.yaml");
-    validateAgent(await readRequired(agentPath), agentPath);
+    const agentSource = await readRequired(agentPath);
+    validateAgent(agentSource, agentPath);
+    if (skill.implicit) {
+      assert(
+        /^[ \t]{2}allow_implicit_invocation:[ \t]*true[ \t]*$/m.test(agentSource),
+        `${agentPath}: implicit invocation must be enabled`,
+      );
+    }
   }
 
   if (skill.metadata) {
