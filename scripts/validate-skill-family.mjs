@@ -176,7 +176,7 @@ async function validateHarnessSlimContract(directory) {
   const featureTemplate = await readRequired(featureTemplatePath);
   assert(
     featureTemplate.includes(
-      "<!-- Keep bounded tracked work here. For substantial work that needs durable phases, coordination, recovery, or risk control, use `docs/plans/{{FEATURE_ID}}.md`. -->",
+      "<!-- Bounded (default): 1-3 files, 1 workspace, <200 lines. Substantial: >=4 files or >=2 workspaces, DB migration/breaking API, or needs phases/rollback -> use docs/plans/{{FEATURE_ID}}.md (needs >=2 substantial signals). -->",
     ),
     `${featureTemplatePath}: plan guidance is incorrect`,
   );
