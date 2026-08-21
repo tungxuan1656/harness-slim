@@ -1,5 +1,6 @@
 {
   "name": "harness-slim",
+  "version": "1.4.0",
   "description": "Create compact coding-agent harnesses by inspecting repository evidence and writing concise instructions, feature state, progress, and editable Bash verification.",
   "license": "MIT",
   "author": "tungxuan1656",
@@ -20,7 +21,8 @@
     "references/memory-persistence-pattern.md",
     "references/context-engineering-pattern.md",
     "references/multi-agent-pattern.md",
-    "references/gotchas.md"
+    "references/gotchas.md",
+    "references/gotchas-full.md"
   ],
   "triggers": [
     "harness engineering",
